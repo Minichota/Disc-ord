@@ -93,12 +93,12 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 		case DISC:
 		{
 			// COMMAND, [DISCs]
-			//if(words.size() != 2)
-			//{
-			//	log_data("attempt to query with !=2 words in command: DISC");
-			//	output.fields = {EmbedField("dumbass", "you are dumb, you should only supply 2 fields")};
-			//	break;
-			//}
+			if(words.size() == 1)
+			{
+				log_data("attempt to query with ==1 words in command: DISC");
+				output.fields = {EmbedField("dumbass", "you are dumb, you must supply more than one field")};
+				return;
+			}
 
 			// resplit data by comma TODO fix really hacky solution
 			std::string disc_list;
