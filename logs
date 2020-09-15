@@ -929,3 +929,27 @@ couldn't find disc by: intertia
 Mon Sep 14 19:45:07 2020
 couldn't find disc by: intertia
 attempt to query non existant discintertia
+
+Tue Sep 15 18:42:31 2020
+couldn't find disc by: disc
+attempt to query non existant discdisc
+couldn't find disc by: undertaker,
+attempt to query non existant discundertaker,
+
+Tue Sep 15 18:42:58 2020
+couldn't find disc by: disc
+attempt to query non existant discdisc
+couldn't find disc by: undertaker,
+attempt to query non existant discundertaker,
+
+Tue Sep 15 18:43:26 2020
+couldn't find disc by: disc
+attempt to query non existant discdisc
+couldn't find disc by: undertaker,
+attempt to query non existant discundertaker,
+
+Tue Sep 15 18:45:42 2020
+couldn't find disc by: disc undertaker
+attempt to query non existant discdisc undertaker
+couldn't find disc by:  instinct
+attempt to query non existant disc instinct

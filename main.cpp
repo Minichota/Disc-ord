@@ -92,24 +92,40 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 	{
 		case DISC:
 		{
-			// COMMAND, DISC
-			if(words.size() != 2)
+			// COMMAND, [DISCs]
+			//if(words.size() != 2)
+			//{
+			//	log_data("attempt to query with !=2 words in command: DISC");
+			//	output.fields = {EmbedField("dumbass", "you are dumb, you should only supply 2 fields")};
+			//	break;
+			//}
+
+			// resplit data by comma TODO fix really hacky solution
+			std::string disc_list;
+			std::vector<std::string> discs(words.size() - 1);
+			std::copy(words.begin() + 1, words.end(), discs.begin());
+			for(std::string s : discs)
 			{
-				log_data("attempt to query with !=2 words in command: DISC");
-				output.fields = {EmbedField("dumbass", "you are dumb, you should only supply 2 fields")};
-				break;
-			}
-			disc d = search_disc(words[1]);
-			// check if not found
-			if(d.mold == "")
-			{
-				log_data("attempt to query non existant disc"+words[1]);
-				output.fields = {EmbedField("dumbass", "you are dumb, disc not found by that name"+words[1])};
-				return;
-				break;
+				disc_list.append(s);
 			}
 
-			output.fields.push_back(d.serialize());
+			discs.clear();
+
+			// splitting by comma
+			discs = split(disc_list, ',');
+
+			for(size_t i = 0; i < discs.size(); i++)
+			{
+				disc d = search_disc(discs[i]);
+				// check if not found
+				if(d.mold == "")
+				{
+					log_data("attempt to query non existant disc"+discs[i]);
+					output.fields.push_back(EmbedField("dumbass", "you are dumb, disc not found by that name: "+discs[i]));
+					continue;
+				}
+				output.fields.push_back(d.serialize());
+			}
 			return;
 		}
 		break;
