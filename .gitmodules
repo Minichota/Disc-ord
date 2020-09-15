@@ -1,0 +1,3 @@
+[submodule "extern/sleepy-discord"]
+	path = extern/sleepy-discord
+	url = https://github.com/yourWaifu/sleepy-discord
