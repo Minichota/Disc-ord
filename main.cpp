@@ -222,7 +222,8 @@ int main() {
 	load_bags();
 
 	// BOT
-	MyClientClass client("NzMyNzM4NDY0MTA1MTAzNDkz.Xw4-eA.u2ihSoLgwV03O-eX5y4150hSCFw", SleepyDiscord::USER_CONTROLED_THREADS);
+	// I'm going to leave the bot token as the one it was before and not commit this part,
+	// I don't know the best way to do this so whatever
 	client.run();
 
 	return 0;
