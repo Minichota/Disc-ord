@@ -93,6 +93,14 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			value.erase(value.begin());
 		return value;
 	};
+	auto trim_float = [](std::string value)->std::string
+	{
+		while(value.back() == '0')
+			value.pop_back();
+		if(value.back() == '.')
+			value.pop_back();
+		return value;
+	};
 	std::vector<std::string> words = split(command.second, ' ');
 	switch(command.first)
 	{
@@ -126,6 +134,7 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			{
 				// remove leading space
 				discs[i] = trim(discs[i]);
+
 				disc d = search_disc(discs[i]);
 				// check if not found
 				if(d.mold == "")
@@ -192,24 +201,22 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 		{
 			// COMMAND, FLIGHT, [x/\x]/[x/\x]/[x/\x]/[x/\x]
 			std::vector<disc> discs = flight_search(words[1]);
-			std::string out = "```\n";
 			for(disc d : discs)
 			{
-				out.append(case_switch(d.mold)+'\n');
+				output.fields.push_back(EmbedField(case_switch(d.mold),
+							trim_float(std::to_string(d.flight.speed))+"/"+
+							trim_float(std::to_string(d.flight.glide))+"/"+
+							trim_float(std::to_string(d.flight.turn))+"/"+
+							trim_float(std::to_string(d.flight.fade))));
 			}
 			if(discs.empty())
 			{
-				out = "are you sure any discs like that exist?";
+				output.fields = {EmbedField("you fool", "are you sure any discs like that exist?")};
 			}
-			else
-			{
-				out.append("```");
-			}
-			//return out;
+			return;
 		}
 		break;
 	}
-	//return "command found but not handled!";
 }
 
 class MyClientClass : public SleepyDiscord::DiscordClient {
@@ -224,18 +231,9 @@ class MyClientClass : public SleepyDiscord::DiscordClient {
 				Embed e;
 				handle_commands(e, std::pair<command_ID,std::string>{(command_ID)command, trimmed_content});
 				sendMessage(message.channelID, "", e);
-				//if(output.size() >= 2000)
-				//{
-				//	sendMessage(message.channelID, "the command you sent returned an output beyond Discord's messaging limit, you god damn genius");
-				//}
-				//else
-				//{
-				//	sendMessage(message.channelID, output);
-				//}
 			}
 			else
 			{
-				sendMessage(message.channelID, "command not found :(");
 				log_data("couldn't parse command: "+trimmed_content);
 			}
 		}

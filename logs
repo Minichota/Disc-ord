@@ -975,3 +975,8 @@ couldn't find disc by:  buzzz SS
 attempt to query non existant disc buzzz SS
 couldn't find disc by:  buzzz
 attempt to query non existant disc buzzz
+
+Wed Sep 16 11:47:45 2020
+couldn't parse command: test
+couldn't find disc by: test
+attempt to query non existant disctest
