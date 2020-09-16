@@ -96,7 +96,7 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			if(words.size() == 1)
 			{
 				log_data("attempt to query with ==1 words in command: DISC");
-				output.fields = {EmbedField("dumbass", "you are dumb, you must supply more than one field")};
+				output.fields = {EmbedField("you fool", "you must supply more than just command")};
 				return;
 			}
 
@@ -125,7 +125,7 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 				if(d.mold == "")
 				{
 					log_data("attempt to query non existant disc"+discs[i]);
-					output.fields.push_back(EmbedField("dumbass", "you are dumb, disc not found by that name: "+discs[i]));
+					output.fields.push_back(EmbedField("you fool", "disc not found, name: "+discs[i]));
 					continue;
 				}
 				output.fields.push_back(d.serialize());
@@ -138,14 +138,14 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			// COMMAND, USER
 			if(words.size() <= 1)
 			{
-				output.fields = {EmbedField("dumbass", "you are dumb, don't forget the owner's name")};
+				output.fields = {EmbedField("you fool", "don't forget the owner's name")};
 				return;
 			}
 			bag* b = search_bag(words[1]);
 			// check if not found
 			if(b == nullptr)
 			{
-				output.fields = {EmbedField("dumbass", "you are dumb, this bag don't exist")};
+				output.fields = {EmbedField("you fool", "this bag doesn't exist")};
 				return;
 			}
 
