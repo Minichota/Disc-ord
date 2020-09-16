@@ -107,7 +107,9 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			for(std::string s : discs)
 			{
 				disc_list.append(s);
+				disc_list.push_back(' ');
 			}
+			disc_list.pop_back();
 
 			discs.clear();
 
@@ -116,6 +118,8 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 
 			for(size_t i = 0; i < discs.size(); i++)
 			{
+				// remove leading space
+				if(i > 0) discs[i].erase(discs[i].begin());
 				disc d = search_disc(discs[i]);
 				// check if not found
 				if(d.mold == "")
