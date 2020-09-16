@@ -89,10 +89,8 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 {
 	auto trim = [](std::string value)->std::string
 	{
-		while(value.back() == '0')
-			value.pop_back();
-		if(value.back() == '.')
-			value.pop_back();
+		while(value.front() == ' ')
+			value.erase(value.begin());
 		return value;
 	};
 	std::vector<std::string> words = split(command.second, ' ');
