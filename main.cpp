@@ -87,6 +87,14 @@ size_t parse_command(std::string text) {
 
 void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 {
+	auto trim = [](std::string value)->std::string
+	{
+		while(value.back() == '0')
+			value.pop_back();
+		if(value.back() == '.')
+			value.pop_back();
+		return value;
+	};
 	std::vector<std::string> words = split(command.second, ' ');
 	switch(command.first)
 	{
@@ -119,7 +127,7 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			for(size_t i = 0; i < discs.size(); i++)
 			{
 				// remove leading space
-				if(i > 0) discs[i].erase(discs[i].begin());
+				discs[i] = trim(discs[i]);
 				disc d = search_disc(discs[i]);
 				// check if not found
 				if(d.mold == "")
