@@ -9,14 +9,12 @@
 using namespace SleepyDiscord;
 
 // TODO remove
-#include <cassert>
 #include <iostream>
 
-bag::bag(std::string owner, std::vector<disc> discs):
+bag::bag(User owner, std::vector<disc> discs):
 owner(owner),
 discs(discs)
 {
-	assert(discs[0].plasticID != 0);
 }
 
 bag::~bag()
@@ -92,7 +90,8 @@ std::vector<EmbedField> bag::serialize()
 std::string bag::data_dump()
 {
 	auto wrap = [](std::string str){ return "\"" + str + "\"";};
-	std::string out = wrap(owner)+',';
+	std::string out = wrap(owner.username);
+	if(discs.size());
 	for(disc d : discs)
 	{
 		auto trim = [](std::string value)->std::string

@@ -8,8 +8,9 @@ std::map<BRAND, std::vector<std::string>> disc::plastics = {
 	{ INNOVA,         { "null","star","starlite","echo_star","gstar","champion","metal_flake","blizzard","xt","driver_pro","kc_pro","r_pro","jk_pro","dx" } },
 	{ PRODIGY,        { "null","200","300","350","350g","400","400g","450","500","750","750g" } },
 	{ DISCRAFT,       { "null","x","z","elite_z","big_z","pro_d","jawbreaker","x_soft","crazy_tuff","z_flx","titanium","z_lite","esp" } },
-	{ DISCMANIA,      { "null","c_line","d_line","p_line","s_line","x_line","g_line","blizzard_c_line","glow_c_line","metal_flake_c_line","luster_c_line","shimmer_c_line","swirl_s_line","exo","neo","lux","forge","active","active_premium","ladyline","sg_line"} },
-	{ INFINITE_DISCS, { "null","s_blend","c_blend","g_blend","i_blend","d_blend","x_blend","p_blend"} }
+	{ DISCMANIA,      { "null","d_Line","c_Line","s_Line","p_Line","g_Line","x_Line","active","active_premium","exo_soft","exo_hard","neo","lux" } },
+	{ INFINITE_DISCS, { "null","s_blend","c_blend","g_blend","i_blend","d_blend","x_blend","p_blend"} },
+	{ MVP,            { "null","nuetron","cosmic_nuetron","proton","plasma","eclipse","fission","electron","cosmic_electron" } }
 };
 
 disc::disc(BRAND brand, std::string mold, size_t plasticID, uint8_t mass, WEAR wear):

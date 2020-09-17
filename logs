@@ -980,3 +980,15 @@ Wed Sep 16 11:47:45 2020
 couldn't parse command: test
 couldn't find disc by: test
 attempt to query non existant disctest
+
+Thu Sep 17 13:04:47 2020
+couldn't find bag owned by: Minichota
+
+Thu Sep 17 13:07:32 2020
+couldn't parse command: add_Bag
+
+Thu Sep 17 13:09:30 2020
+couldn't find bag owned by: Minichota
+
+Thu Sep 17 13:10:25 2020
+failed to find a plastic

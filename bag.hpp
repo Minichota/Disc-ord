@@ -11,7 +11,7 @@
 class bag
 {
 	public:
-	bag(std::string owner, std::vector<disc> discs);
+	bag(SleepyDiscord::User owner, std::vector<disc> discs);
 	bag() = default;
 	~bag();
 
@@ -24,7 +24,7 @@ class bag
 
 	std::string data_dump();
 
-	std::string owner;
+	SleepyDiscord::User owner;
 
 	private:
 	std::vector<disc> discs;

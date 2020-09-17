@@ -11,6 +11,8 @@
 // TODO remove
 #include <iostream>
 
+using namespace SleepyDiscord;
+
 std::vector<disc> g_discs;
 std::vector<bag> g_bags;
 
@@ -29,17 +31,17 @@ disc search_disc(std::string name)
 	return disc();
 }
 
-bag* search_bag(std::string owner)
+bag* search_bag(User owner)
 {
 	auto result = std::find_if(g_bags.begin(), g_bags.end(),
-			[owner](const bag& x){ return case_switch(x.owner) == case_switch(owner); });
+			[owner](const bag& x){ return x.owner.username == owner.username; });
 	if(result != g_bags.end())
 	{
 		return result.base();
 	}
 	else
 	{
-		log_data("couldn't find bag owned by: " + owner);
+		log_data("couldn't find bag owned by: " + owner.username);
 	}
 	return nullptr;
 }
@@ -126,7 +128,8 @@ void load_bags()
 
 	while(location != &file_data.back())
 	{
-		std::string owner = next_string();
+		User owner = User();
+		owner.username = next_string();
 		std::vector<disc> discs;
 		while(*location != '\n')
 		{

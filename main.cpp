@@ -62,6 +62,7 @@ std::string case_switch(std::string str) {
 enum command_ID
 {
 	DISC = 0,
+	ADD_BAG,
 	BAG,
 	IBAG,
 	UNBAG,
@@ -70,6 +71,7 @@ enum command_ID
 
 const std::vector<std::pair<command_ID,std::string>> commands {
 	{ DISC, "disc" },
+	{ ADD_BAG, "add_bag" },
 	{ BAG, "bag" },
 	{ IBAG, "ibag" },
 	{ UNBAG, "unbag" },
@@ -85,7 +87,7 @@ size_t parse_command(std::string text) {
 	return -1;
 }
 
-void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
+void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string> command)
 {
 	auto trim = [](std::string value)->std::string
 	{
@@ -148,15 +150,18 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			return;
 		}
 		break;
+		case ADD_BAG:
+		{
+			g_bags.push_back(bag(owner, {}));
+			output.fields = {EmbedField("new bag", "your bag was created")};
+			save_bags();
+			return;
+		}
+		break;
 		case BAG:
 		{
 			// COMMAND, USER
-			if(words.size() <= 1)
-			{
-				output.fields = {EmbedField("you fool", "don't forget the owner's name")};
-				return;
-			}
-			bag* b = search_bag(words[1]);
+			bag* b = search_bag(owner);
 			// check if not found
 			if(b == nullptr)
 			{
@@ -165,17 +170,17 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 			}
 
 			output.fields = b->serialize();
-			output.title = b->owner;
+			output.title = b->owner.username;
 			return;
 		}
 		break;
 		case IBAG:
 		{
-			// COMMAND, USER, MOLD, [PLASTIC], [MASS], [WEAR], [FLIGHT, x/x/x/x]
-			disc d = search_disc(words[2]);
-			if(words.size() == 7)
+			// COMMAND, MOLD, [PLASTIC], [FLIGHT, x/x/x/x], [WEAR], [MASS]
+			disc d = search_disc(words[1]);
+			if(words.size() >= 4)
 			{
-				std::vector<std::string> flight = split(words[6],'/');
+				std::vector<std::string> flight = split(words[3],'/');
 				d.flight = flight_path {
 					std::stof(flight[0]),
 					std::stof(flight[1]),
@@ -183,18 +188,23 @@ void handle_commands(Embed& output, std::pair<command_ID,std::string> command)
 					std::stof(flight[3])
 				};
 			}
-			bag* b = search_bag(words[1]);
-			b->add_disc(d, words.size() == 3 ? to_plasticID(d.brand, "null"): to_plasticID(d.brand, words[3]),
-						words.size() >= 4 ? std::stoi(words[4]) : NULL, words.size() >= 5 ? to_wear(words[5]) : NIL);
-			//return "bagged that shit homie";
+			bag* b = search_bag(owner);
+			// plastic, mass, wear
+			b->add_disc(d, words.size() >= 3 ? to_plasticID(d.brand, words[2]) : to_plasticID(d.brand, "null"),
+						words.size() == 6 ? std::stoi(words[5]) : NULL,
+						words.size() >= 5 ? to_wear(words[4]) : NIL);
+			output.fields = {EmbedField("pog", "disc added to bag")};
+			return;
 		}
 		break;
 		case UNBAG:
 		{
-			// COMMAND, USER, INDEX
-			bag* b = search_bag(words[1]);
-			b->remove_disc(std::stoi(words[2]));
-			//return "get that shit out of here";
+			// COMMAND, INDEX
+			bag* b = search_bag(owner);
+			b->remove_disc(std::stoi(words[1]));
+
+			output.fields = {EmbedField("pog", "disc removed from bag")};
+			return;
 		}
 		break;
 		case FLIGHT_SEARCH:
@@ -229,7 +239,7 @@ class MyClientClass : public SleepyDiscord::DiscordClient {
 			if(command != -1)
 			{
 				Embed e;
-				handle_commands(e, std::pair<command_ID,std::string>{(command_ID)command, trimmed_content});
+				handle_commands(e, message.author, std::pair<command_ID,std::string>{(command_ID)command, trimmed_content});
 				sendMessage(message.channelID, "", e);
 			}
 			else

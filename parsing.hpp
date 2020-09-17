@@ -8,7 +8,7 @@
 #include "disc.hpp"
 
 extern disc search_disc(std::string);
-extern bag* search_bag(std::string owner);
+extern bag* search_bag(SleepyDiscord::User owner);
 
 extern void load_discs();
 extern void load_bags();
