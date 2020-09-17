@@ -66,7 +66,8 @@ enum command_ID
 	BAG,
 	IBAG,
 	UNBAG,
-	FLIGHT_SEARCH
+	FLIGHT_SEARCH,
+	CRASH
 };
 
 const std::vector<std::pair<command_ID,std::string>> commands {
@@ -75,7 +76,8 @@ const std::vector<std::pair<command_ID,std::string>> commands {
 	{ BAG, "bag" },
 	{ IBAG, "ibag" },
 	{ UNBAG, "unbag" },
-	{ FLIGHT_SEARCH, "flight_search" }
+	{ FLIGHT_SEARCH, "flight_search" },
+	{ CRASH, "crash" }
 };
 
 size_t parse_command(std::string text) {
@@ -224,6 +226,11 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 				output.fields = {EmbedField("you fool", "are you sure any discs like that exist?")};
 			}
 			return;
+		}
+		break;
+		case CRASH:
+		{
+			exit(0);
 		}
 		break;
 	}
