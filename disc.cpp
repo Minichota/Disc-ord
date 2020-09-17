@@ -10,7 +10,7 @@ std::map<BRAND, std::vector<std::string>> disc::plastics = {
 	{ DISCRAFT,       { "null","x","z","elite_z","big_z","pro_d","jawbreaker","x_soft","crazy_tuff","z_flx","titanium","z_lite","esp" } },
 	{ DISCMANIA,      { "null","d_Line","c_Line","s_Line","p_Line","g_Line","x_Line","active","active_premium","exo_soft","exo_hard","neo","lux" } },
 	{ INFINITE_DISCS, { "null","s_blend","c_blend","g_blend","i_blend","d_blend","x_blend","p_blend"} },
-	{ MVP,            { "null","nuetron","cosmic_nuetron","proton","plasma","eclipse","fission","electron","cosmic_electron" } }
+	{ MVP,            { "null","neutron","cosmic_neutron","proton","plasma","eclipse","fission","electron","cosmic_electron" } }
 };
 
 disc::disc(BRAND brand, std::string mold, size_t plasticID, uint8_t mass, WEAR wear):
