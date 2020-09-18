@@ -12,7 +12,7 @@ std::map<BRAND, std::vector<std::string>> disc::plastics = {
 	{ INFINITE_DISCS, { "null","s_blend","c_blend","g_blend","i_blend","d_blend","x_blend","p_blend"} },
 	{ MVP,            { "null","neutron","cosmic_neutron","proton","plasma","eclipse","fission","electron","cosmic_electron" } },
 	{ AXIOM,          { "null","neutron","cosmic_neutron","proton","plasma","eclipse","fission","electron","cosmic_electron" } },
-	{ RPM,          { "null","atomic","cosmic","magma","magma_soft","strata" } }
+	{ RPM,            { "null","atomic","cosmic","magma","magma_soft","strata","platinum" } }
 };
 
 disc::disc(BRAND brand, std::string mold, size_t plasticID, uint8_t mass, WEAR wear):
