@@ -67,7 +67,8 @@ enum command_ID
 	IBAG,
 	UNBAG,
 	FLIGHT_SEARCH,
-	CRASH
+	CRASH,
+	GIT_GUD
 };
 
 const std::vector<std::pair<command_ID,std::string>> commands {
@@ -77,7 +78,8 @@ const std::vector<std::pair<command_ID,std::string>> commands {
 	{ IBAG, "ibag" },
 	{ UNBAG, "unbag" },
 	{ FLIGHT_SEARCH, "flight_search" },
-	{ CRASH, "crash" }
+	{ CRASH, "crash" },
+	{ GIT_GUD, "git_gud" }
 };
 
 size_t parse_command(std::string text) {
@@ -231,6 +233,22 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 		case CRASH:
 		{
 			exit(0);
+		}
+		break;
+		case GIT_GUD:
+		{
+			output.fields = {
+				EmbedField(".disc <mold(s) (comma seperated)>","returns a discs properties."),
+				EmbedField(".add_bag","creates a bag for you!"),
+				EmbedField(".bag","shows you your very own bag and all of it's fanciness."),
+				EmbedField(".ibag <mold> <plastic> <flight_numbers>"
+							"<wear and tear (new, beat_in, and flippy)> <mass>","adds a disc to your bag."
+							"The fields are optional so you can supply less than shown above."),
+				EmbedField(".unbag <index>","unbags a disc from your bag by index. It starts at 0."),
+				EmbedField(".flight_search x/x/x/x","returns all discs by supplied numbers. you can leave an x"
+							"in one of the spaces: x/x/0/0 to have any number fit."),
+				EmbedField(".crash","restarts the bot and is only used by me to update it really.")
+			};
 		}
 		break;
 	}
