@@ -68,7 +68,9 @@ enum command_ID
 	UNBAG,
 	FLIGHT_SEARCH,
 	CRASH,
-	GIT_GUD
+	GIT_GUD,
+	BRANDS,
+	PLASTICS
 };
 
 const std::vector<std::pair<command_ID,std::string>> commands {
@@ -79,7 +81,9 @@ const std::vector<std::pair<command_ID,std::string>> commands {
 	{ UNBAG, "unbag" },
 	{ FLIGHT_SEARCH, "flight_search" },
 	{ CRASH, "crash" },
-	{ GIT_GUD, "git_gud" }
+	{ GIT_GUD, "git_gud" },
+	{ BRANDS, "brands" },
+	{ PLASTICS, "plastics" }
 };
 
 size_t parse_command(std::string text) {
@@ -247,8 +251,32 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 				EmbedField(".unbag <index>","unbags a disc from your bag by index. It starts at 0."),
 				EmbedField(".flight_search x/x/x/x","returns all discs by supplied numbers. you can leave an x"
 							"in one of the spaces: x/x/0/0 to have any number fit."),
-				EmbedField(".crash","restarts the bot and is only used by me to update it really.")
+				EmbedField(".crash","restarts the bot and is only used by me to update it really."),
+				EmbedField(".brands","lists all currently implemented brands for bags."),
+				EmbedField(".plastics <brand>","lists all plastics for a brand.")
 			};
+		}
+		break;
+		case BRANDS:
+		{
+			std::string brand_list;
+			for(std::map<BRAND,std::vector<std::string>>::iterator it = disc::plastics.begin(); it != disc::plastics.end(); ++it)
+			{
+				brand_list.append(from_brand(it->first)+", ");
+			}
+			brand_list.erase(brand_list.end() - 2, brand_list.end());
+			output.fields.push_back(EmbedField("brands",brand_list));
+		}
+		break;
+		case PLASTICS:
+		{
+			std::string plastic_list;
+			for(std::string s : disc::plastics[to_brand(words[1])])
+			{
+				plastic_list.append(s+", ");
+			}
+			plastic_list.erase(plastic_list.end() - 2, plastic_list.end());
+			output.fields.push_back(EmbedField("plastics for brand: "+words[1],plastic_list));
 		}
 		break;
 	}
