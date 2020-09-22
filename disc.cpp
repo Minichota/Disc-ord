@@ -16,6 +16,7 @@ std::map<BRAND, std::vector<std::string>> disc::plastics = {
 	{ DYNAMIC_DISCS,  { "null","moon_shine","fuzion","lucid","lucid_air","fuzion_bio","prime","classic","classic_blend","classic_soft","classic_ss" } },
 	{ LATITUDE_64,    { "null","moon_shine","gold_line","opto_line","opto_air","reprocessed","mega_soft","zero_soft","zero_medium","zero_hard","retro_line" } },
 	{ WESTSIDE,       { "null","moon_shine","tournament","vip","vip_air","elasto","tournament_r","mega_soft","bt_soft","bt_medium","bt_hard","origio" } }
+	{ KASTAPLAST,     { "null","k1","k1_soft","k3","k1_glow" } }
 };
 
 disc::disc(BRAND brand, std::string mold, size_t plasticID, uint8_t mass, WEAR wear):
