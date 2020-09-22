@@ -8,11 +8,14 @@ std::map<BRAND, std::vector<std::string>> disc::plastics = {
 	{ INNOVA,         { "null","star","starlite","echo_star","gstar","champion","metal_flake","blizzard","xt","driver_pro","kc_pro","r_pro","jk_pro","dx" } },
 	{ PRODIGY,        { "null","200","300","350","350g","400","400g","450","500","750","750g" } },
 	{ DISCRAFT,       { "null","x","z","elite_z","big_z","pro_d","jawbreaker","x_soft","crazy_tuff","z_flx","titanium","z_lite","esp" } },
-	{ DISCMANIA,      { "null","d_Line","c_Line","s_Line","p_Line","g_Line","x_Line","active","active_premium","exo_soft","exo_hard","neo","lux" } },
+	{ DISCMANIA,      { "null","d_line","c_line","s_line","p_line","g_line","x_line","active","active_premium","exo_soft","exo_hard","neo","lux" } },
 	{ INFINITE_DISCS, { "null","s_blend","c_blend","g_blend","i_blend","d_blend","x_blend","p_blend"} },
 	{ MVP,            { "null","neutron","cosmic_neutron","proton","plasma","eclipse","fission","electron","cosmic_electron" } },
 	{ AXIOM,          { "null","neutron","cosmic_neutron","proton","plasma","eclipse","fission","electron","cosmic_electron" } },
-	{ RPM,            { "null","atomic","cosmic","magma","magma_soft","strata","platinum" } }
+	{ RPM,            { "null","atomic","cosmic","magma","magma_soft","strata","platinum" } },
+	{ DYNAMIC_DISCS,  { "null","moon_shine","fuzion","lucid","lucid_air","fuzion_bio","prime","classic","classic_blend","classic_soft","classic_ss" } },
+	{ LATITUDE_64,    { "null","moon_shine","gold_line","opto_line","opto_air","reprocessed","mega_soft","zero_soft","zero_medium","zero_hard","retro_line" } },
+	{ WESTSIDE,       { "null","moon_shine","tournament","vip","vip_air","elasto","tournament_r","mega_soft","bt_soft","bt_medium","bt_hard","origio" } }
 };
 
 disc::disc(BRAND brand, std::string mold, size_t plasticID, uint8_t mass, WEAR wear):
@@ -39,19 +42,28 @@ EmbedField disc::serialize()
 			value.pop_back();
 		return value;
 	};
+	auto replace_underscore = [](std::string value)->std::string
+	{
+		auto index = std::find(value.begin(), value.end(), '_');
+		while(index != value.end())
+		{
+			*index.base() = ' ';
+			index = std::find(value.begin(), value.end(), '_');
+		}
+		return value;
+	};
+
 	EmbedField output(case_switch(mold)+'\n',
 
-		case_switch(from_brand(brand))+'\n'+
-		case_switch((wear == NIL ? "" : from_wear(wear) + " "))+
-		(plasticID != 0 ? case_switch(plastics[brand][plasticID]) + ' ' : "")+
-		(mass == 0 ? "" : std::to_string(mass)+'g'+" ")+
 		trim(std::to_string(flight.speed))+'/'+
 		trim(std::to_string(flight.glide))+'/'+
 		trim(std::to_string(flight.turn))+'/'+
-		trim(std::to_string(flight.fade))
-
+		trim(std::to_string(flight.fade))+'\n'+
+		replace_underscore(case_switch((wear == NIL ? "" : from_wear(wear) + " ")))+
+		replace_underscore((plasticID != 0 ? case_switch(plastics[brand][plasticID]) + ' ' : ""))+
+		(mass == 0 ? "" : std::to_string(mass)+'g'+" "),
+		true
 	);
-	output.isInline = true;
 	return output;
 }
 

@@ -61,10 +61,56 @@ std::vector<EmbedField> bag::serialize()
 {
 	sort();
 
+	auto insert_index = [&](disc d, EmbedField field)
+	{
+		auto index = std::find(discs.begin(), discs.end(), d);
+		field.name = std::to_string(std::distance(discs.begin(), index)) + " " + field.name;
+		return field;
+	};
+
 	std::vector<EmbedField> output;
+	std::vector<disc> putters;
+	std::vector<disc> mids;
+	std::vector<disc> fairways;
+	std::vector<disc> distance;
 	for(size_t i = 0; i < discs.size(); i++)
 	{
-		output.push_back(discs[i].serialize());
+		if(0 <= discs[i].flight.speed && discs[i].flight.speed <= 3) { putters.push_back(discs[i]); }
+		else if(4 <= discs[i].flight.speed && discs[i].flight.speed <= 6) { mids.push_back(discs[i]); }
+		else if(7 <= discs[i].flight.speed && discs[i].flight.speed <= 10) { fairways.push_back(discs[i]); }
+		else if(11 <= discs[i].flight.speed) { distance.push_back(discs[i]); }
+	}
+	if(putters.size() > 0)
+	{
+		output.push_back(EmbedField("PUTTERS","--------------------"));
+		for(disc d : putters)
+		{
+			output.push_back(insert_index(d, d.serialize()));
+		}
+	}
+	if(mids.size() > 0)
+	{
+		output.push_back(EmbedField("MID-RANGES","--------------------"));
+		for(disc d : mids)
+		{
+			output.push_back(insert_index(d, d.serialize()));
+		}
+	}
+	if(fairways.size() > 0)
+	{
+		output.push_back(EmbedField("FAIRWAYS","--------------------"));
+		for(disc d : fairways)
+		{
+			output.push_back(insert_index(d, d.serialize()));
+		}
+	}
+	if(distance.size() > 0)
+	{
+		output.push_back(EmbedField("DRIVERS","--------------------"));
+		for(disc d : distance)
+		{
+			output.push_back(insert_index(d, d.serialize()));
+		}
 	}
 	//for(size_t i = 0; i < discs.size(); i++)
 	//{

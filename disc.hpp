@@ -128,6 +128,16 @@ class disc
 	public:
 	static
 	std::map<BRAND, std::vector<std::string>> plastics;
+
+	bool operator ==(const disc d)
+	{
+		return d.mold == this->mold &&
+			   d.flight.speed == this->flight.speed &&
+			   d.flight.glide == this->flight.glide &&
+			   d.flight.turn == this->flight.turn &&
+			   d.flight.fade == this->flight.fade &&
+			   plastics[d.brand][d.plasticID] == plastics[this->brand][this->plasticID];
+	}
 };
 
 extern std::vector<disc> flight_search(const std::string& path);
