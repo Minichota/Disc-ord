@@ -153,7 +153,7 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 					output.fields.push_back(EmbedField("you fool", "disc not found, name: "+discs[i]));
 					continue;
 				}
-				output.fields.push_back(d.serialize());
+				output.fields.push_back(d.serialize_simple());
 			}
 			return;
 		}
@@ -185,10 +185,33 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 		case IBAG:
 		{
 			// COMMAND, MOLD, [PLASTIC], [FLIGHT, x/x/x/x], [WEAR], [MASS]
-			disc d = search_disc(words[1]);
-			if(words.size() >= 4)
+
+			// resplit data by comma TODO fix really hacky solution
+			std::string field_list;
+			std::vector<std::string> fields(words.size() - 1);
+			std::copy(words.begin() + 1, words.end(), fields.begin());
+			for(std::string s : fields)
 			{
-				std::vector<std::string> flight = split(words[3],'/');
+				field_list.append(s);
+				field_list.push_back(' ');
+			}
+			field_list.pop_back();
+
+			fields.clear();
+
+			// splitting by comma
+			fields = split(field_list, ',');
+
+			disc d = search_disc(trim(fields[0]));
+			if(d == disc())
+			{
+				// ERROR
+				output.fields = {EmbedField("you fool", "that disc wasn't found")};
+				return;
+			}
+			if(fields.size() >= 4)
+			{
+				std::vector<std::string> flight = split(trim(fields[2]),'/');
 				d.flight = flight_path {
 					std::stof(flight[0]),
 					std::stof(flight[1]),
@@ -197,11 +220,23 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 				};
 			}
 			bag* b = search_bag(owner);
+			if(b == nullptr)
+			{
+				// ERROR
+				output.fields = {EmbedField("you fool", "you don't own a bag")};
+				return;
+			}
 			// plastic, mass, wear
-			b->add_disc(d, words.size() >= 3 ? to_plasticID(d.brand, words[2]) : to_plasticID(d.brand, "null"),
-						words.size() == 6 ? std::stoi(words[5]) : NULL,
-						words.size() >= 5 ? to_wear(words[4]) : NIL);
-			output.fields = {EmbedField("pog", "disc added to bag")};
+			if(d.brand != null && to_plasticID(d.brand, "null") == (size_t)-1)
+			{
+				// ERROR
+				output.fields = {EmbedField("you fool", "that brand isn't implemented yet for bags.")};
+				return;
+			}
+			b->add_disc(d, fields.size() >= 2 ? to_plasticID(d.brand, trim(fields[1])) : to_plasticID(d.brand, "null"),
+						fields.size() == 5 ? std::stoi(trim(fields[4])) : NULL,
+						fields.size() >= 4 ? to_wear(trim(fields[3])) : NIL);
+			output.fields = {EmbedField("good job", "disc added to bag")};
 			return;
 		}
 		break;
@@ -211,7 +246,7 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 			bag* b = search_bag(owner);
 			b->remove_disc(std::stoi(words[1]));
 
-			output.fields = {EmbedField("pog", "disc removed from bag")};
+			output.fields = {EmbedField("good job", "disc removed from bag")};
 			return;
 		}
 		break;
@@ -245,8 +280,8 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 				EmbedField(".disc <mold(s) (comma seperated)>","returns a discs properties."),
 				EmbedField(".add_bag","creates a bag for you!"),
 				EmbedField(".bag","shows you your very own bag and all of it's fanciness."),
-				EmbedField(".ibag <mold> <plastic> <flight_numbers>"
-							"<wear and tear (new, beat_in, and flippy)> <mass>","adds a disc to your bag."
+				EmbedField(".ibag <mold>, <plastic>, <flight_numbers>,"
+							"<wear and tear (new, beat_in, and flippy)>, <mass>","adds a disc to your bag."
 							"The fields are optional so you can supply less than shown above."),
 				EmbedField(".unbag <index>","unbags a disc from your bag by index. It starts at 0."),
 				EmbedField(".flight_search x/x/x/x","returns all discs by supplied numbers. you can leave an x"

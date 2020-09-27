@@ -16,7 +16,8 @@ std::map<BRAND, std::vector<std::string>> disc::plastics = {
 	{ DYNAMIC_DISCS,  { "null","moon_shine","fuzion","lucid","lucid_air","fuzion_bio","prime","classic","classic_blend","classic_soft","classic_ss" } },
 	{ LATITUDE_64,    { "null","moon_shine","gold_line","opto_line","opto_air","reprocessed","mega_soft","zero_soft","zero_medium","zero_hard","retro_line" } },
 	{ WESTSIDE,       { "null","moon_shine","tournament","vip","vip_air","elasto","tournament_r","mega_soft","bt_soft","bt_medium","bt_hard","origio" } },
-	{ KASTAPLAST,     { "null","k1","k1_soft","k3","k1_glow" } }
+	{ KASTAPLAST,     { "null","k1","k1_soft","k3","k1_glow" } },
+	{ MILLENNIUM,     { "null","delta_t","standard","supersoft","et","lunar","quantum","quantum_zero_g","sirius" } }
 };
 
 disc::disc(BRAND brand, std::string mold, size_t plasticID, uint8_t mass, WEAR wear):
@@ -68,9 +69,47 @@ EmbedField disc::serialize()
 	return output;
 }
 
+EmbedField disc::serialize_simple()
+{
+	auto trim = [](std::string value)->std::string
+	{
+		while(value.back() == '0')
+			value.pop_back();
+		if(value.back() == '.')
+			value.pop_back();
+		return value;
+	};
+	auto replace_underscore = [](std::string value)->std::string
+	{
+		auto index = std::find(value.begin(), value.end(), '_');
+		while(index != value.end())
+		{
+			*index.base() = ' ';
+			index = std::find(value.begin(), value.end(), '_');
+		}
+		return value;
+	};
+
+	EmbedField output(case_switch(mold)+'\n',
+		case_switch(from_brand(brand))+'\n'+
+		trim(std::to_string(flight.speed))+'/'+
+		trim(std::to_string(flight.glide))+'/'+
+		trim(std::to_string(flight.turn))+'/'+
+		trim(std::to_string(flight.fade))+'\n',
+		true
+	);
+	return output;
+}
+
 size_t to_plasticID(BRAND brand, std::string plastic)
 {
 	std::vector<std::string> plastic_list = disc::plastics[brand];
+	if(plastic_list.empty())
+	{
+		log_data("brand not implemented " + from_brand(brand));
+		return -1;
+	}
+
 	for(std::string& str : plastic_list)
 	{
 		str = case_switch(str);
@@ -88,6 +127,7 @@ std::string from_brand(BRAND brand)
 {
 	static std::map<BRAND, std::string> brand_s_map =
 	{
+		{null, "null"},
 		{DGA, "DGA"},
 		{DISC_KING, "disc king"},
 		{DISCMANIA, "discmania"},
@@ -149,6 +189,7 @@ BRAND to_brand(std::string str)
 {
 	static std::map<std::string, BRAND> brand_map =
 	{
+		{"null", null},
 		{"DGA", DGA},
 		{"disc king", DISC_KING},
 		{"discmania", DISCMANIA},
