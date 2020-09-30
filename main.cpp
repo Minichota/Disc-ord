@@ -305,19 +305,31 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 		break;
 		case PLASTICS:
 		{
-			std::string plastic_list;
-			if(disc::plastics.find(to_brand(words[1])) != disc::plastics.end())
+			if(words.size() > 1)
 			{
-				for(std::string s : disc::plastics[to_brand(words[1])])
+				std::string plastic_list;
+				std::string brand = words[1];
+				for(size_t i = 2; i < words.size(); i++)
 				{
-					plastic_list.append(s+", ");
+					brand.append(" "+words[i]);
 				}
-				plastic_list.erase(plastic_list.end() - 2, plastic_list.end());
-				output.fields.push_back(EmbedField("plastics for brand: "+words[1],plastic_list));
+				if(disc::plastics.find(to_brand(brand)) != disc::plastics.end())
+				{
+					for(std::string s : disc::plastics[to_brand(brand)])
+					{
+						plastic_list.append(s+", ");
+					}
+					plastic_list.erase(plastic_list.end() - 2, plastic_list.end());
+					output.fields.push_back(EmbedField("plastics for brand: "+brand,plastic_list));
+				}
+				else
+				{
+					output.fields = {EmbedField("you fool", "that brand hasn't been implemented yet.")};
+				}
 			}
 			else
 			{
-				output.fields = {EmbedField("you fool", "that brand hasn't been implemented yet.")};
+				output.fields = {EmbedField("you fool", "you forgot the brand.")};
 			}
 		}
 		break;

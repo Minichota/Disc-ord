@@ -5,19 +5,19 @@
 #include <algorithm>
 
 std::map<BRAND, std::vector<std::string>> disc::plastics = {
-	{ INNOVA,         { "null","star","starlite","echo_star","gstar","champion","metal_flake","blizzard","xt","driver_pro","kc_pro","r_pro","jk_pro","dx" } },
+	{ INNOVA,         { "null","star","starlite","echo star","gstar","champion","metal flake","blizzard","xt","driver pro","kc pro","r pro","jk pro","dx" } },
 	{ PRODIGY,        { "null","200","300","350","350g","400","400g","450","500","750","750g" } },
-	{ DISCRAFT,       { "null","x","z","elite_z","big_z","pro_d","jawbreaker","x_soft","crazy_tuff","z_flx","titanium","z_lite","esp" } },
-	{ DISCMANIA,      { "null","d_line","c_line","s_line","p_line","g_line","x_line","active","active_premium","exo_soft","exo_hard","neo","lux" } },
-	{ INFINITE_DISCS, { "null","s_blend","c_blend","g_blend","i_blend","d_blend","x_blend","p_blend"} },
-	{ MVP,            { "null","neutron","cosmic_neutron","proton","plasma","eclipse","fission","electron","cosmic_electron" } },
-	{ AXIOM,          { "null","neutron","cosmic_neutron","proton","plasma","eclipse","fission","electron","cosmic_electron" } },
-	{ RPM,            { "null","atomic","cosmic","magma","magma_soft","strata","platinum" } },
-	{ DYNAMIC_DISCS,  { "null","moon_shine","fuzion","lucid","lucid_air","fuzion_bio","prime","classic","classic_blend","classic_soft","classic_ss" } },
-	{ LATITUDE_64,    { "null","moon_shine","gold_line","opto_line","opto_air","reprocessed","mega_soft","zero_soft","zero_medium","zero_hard","retro_line" } },
-	{ WESTSIDE,       { "null","moon_shine","tournament","vip","vip_air","elasto","tournament_r","mega_soft","bt_soft","bt_medium","bt_hard","origio" } },
-	{ KASTAPLAST,     { "null","k1","k1_soft","k3","k1_glow" } },
-	{ MILLENNIUM,     { "null","delta_t","standard","supersoft","et","lunar","quantum","quantum_zero_g","sirius" } }
+	{ DISCRAFT,       { "null","x","z","elite z","big z","pro d","jawbreaker","x soft","crazy tuff","z flx","titanium","z lite","esp" } },
+	{ DISCMANIA,      { "null","d line","c line","s line","p line","g line","x line","active","active premium","exo soft","exo hard","neo","lux" } },
+	{ INFINITE_DISCS, { "null","s blend","c blend","g blend","i blend","d blend","x blend","p blend"} },
+	{ MVP,            { "null","neutron","cosmic neutron","proton","plasma","eclipse","fission","electron","cosmic electron" } },
+	{ AXIOM,          { "null","neutron","cosmic neutron","proton","plasma","eclipse","fission","electron","cosmic electron" } },
+	{ RPM,            { "null","atomic","cosmic","magma","magma soft","strata","platinum" } },
+	{ DYNAMIC_DISCS,  { "null","moon shine","fuzion","lucid","lucid air","fuzion bio","prime","classic","classic blend","classic soft","classic ss" } },
+	{ LATITUDE_64,    { "null","moon shine","gold line","opto line","opto air","reprocessed","mega soft","zero soft","zero medium","zero hard","retro line" } },
+	{ WESTSIDE,       { "null","moon shine","tournament","vip","vip air","elasto","tournament r","mega soft","bt soft","bt medium","bt hard","origio" } },
+	{ KASTAPLAST,     { "null","k1","k1 soft","k3","k1 glow" } },
+	{ MILLENNIUM,     { "null","delta t","standard","supersoft","et","lunar","quantum","quantum zero g","sirius" } }
 };
 
 disc::disc(BRAND brand, std::string mold, size_t plasticID, uint8_t mass, WEAR wear):
@@ -44,25 +44,14 @@ EmbedField disc::serialize()
 			value.pop_back();
 		return value;
 	};
-	auto replace_underscore = [](std::string value)->std::string
-	{
-		auto index = std::find(value.begin(), value.end(), '_');
-		while(index != value.end())
-		{
-			*index.base() = ' ';
-			index = std::find(value.begin(), value.end(), '_');
-		}
-		return value;
-	};
-
 	EmbedField output(case_switch(mold)+'\n',
 
 		trim(std::to_string(flight.speed))+'/'+
 		trim(std::to_string(flight.glide))+'/'+
 		trim(std::to_string(flight.turn))+'/'+
 		trim(std::to_string(flight.fade))+'\n'+
-		replace_underscore(case_switch((wear == NIL ? "" : from_wear(wear) + " ")))+
-		replace_underscore((plasticID != 0 ? case_switch(plastics[brand][plasticID]) + ' ' : ""))+
+		case_switch((wear == NIL ? "" : from_wear(wear) + " "))+
+		(plasticID != 0 ? case_switch(plastics[brand][plasticID]) + ' ' : "")+
 		(mass == 0 ? "" : std::to_string(mass)+'g'+" "),
 		true
 	);
@@ -253,7 +242,7 @@ std::string from_wear(WEAR wear)
 	std::map<WEAR, std::string> map =
 	{
 		{ NEW,     "new" },
-		{ BEAT_IN, "beat_in" },
+		{ BEAT_IN, "beat in" },
 		{ FLIPPY,  "flippy" },
 		{ NIL,    "null" }
 	};
@@ -265,14 +254,12 @@ WEAR to_wear(std::string str)
 	std::map<std::string, WEAR> map =
 	{
 		{ "new",     NEW },
-		{ "beat_in", BEAT_IN },
+		{ "beat in", BEAT_IN },
 		{ "flippy",  FLIPPY },
 		{ "null",    NIL }
 	};
 	return map[str];
 }
-
-#include <iostream>
 
 std::vector<disc> flight_search(const std::string& path)
 {

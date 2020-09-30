@@ -112,24 +112,6 @@ std::vector<EmbedField> bag::serialize()
 			output.push_back(insert_index(d, d.serialize()));
 		}
 	}
-	//for(size_t i = 0; i < discs.size(); i++)
-	//{
-	//	std::string disc_description = discs[i].serialize();
-	//	std::vector<std::string> lines = split(disc_description,'\n');
-	//	for(size_t j = 0; j < lines.size(); j++)
-	//	{
-	//		while(4 * (i / GRID_WIDTH) + j >= disc_out.size())
-	//		{
-	//			disc_out.emplace_back();
-	//		}
-	//		std::string spaces;
-	//		for(int i = 0; i < max_length - lines[j].size(); i++)
-	//		{
-	//			spaces.push_back(' ');
-	//		}
-	//		disc_out[4 * (i / GRID_WIDTH) + j].append(lines[j]+spaces);
-	//	}
-	//}
 	return output;
 }
 

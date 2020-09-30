@@ -141,7 +141,9 @@ class disc
 			   d.flight.fade == this->flight.fade;
 		if(d.brand != NULL)
 		{
-			check = check && plastics[d.brand][d.plasticID] == plastics[this->brand][this->plasticID];
+			check &= plastics[d.brand][d.plasticID] == plastics[this->brand][this->plasticID];
+			check &= d.mass == this->mass;
+			check &= d.wear == this->wear;
 		}
 		return check;
 	}
