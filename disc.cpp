@@ -6,14 +6,14 @@
 
 std::map<BRAND, std::vector<std::string>> disc::plastics = {
 	{ INNOVA,         { "null","star","starlite","echo star","gstar","champion","metal flake","blizzard","xt","driver pro","kc pro","r pro","jk pro","dx" } },
-	{ PRODIGY,        { "null","200","300","350","350g","400","400g","450","500","750","750g" } },
+	{ PRODIGY,        { "null","200","300","350","350g","400","400g","500","750","750g" } },
 	{ DISCRAFT,       { "null","x","z","elite z","big z","pro d","jawbreaker","x soft","crazy tuff","z flx","titanium","z lite","esp" } },
 	{ DISCMANIA,      { "null","d line","c line","s line","p line","g line","x line","active","active premium","exo soft","exo hard","neo","lux" } },
 	{ INFINITE_DISCS, { "null","s blend","c blend","g blend","i blend","d blend","x blend","p blend"} },
 	{ MVP,            { "null","neutron","cosmic neutron","proton","plasma","eclipse","fission","electron","cosmic electron" } },
 	{ AXIOM,          { "null","neutron","cosmic neutron","proton","plasma","eclipse","fission","electron","cosmic electron" } },
 	{ RPM,            { "null","atomic","cosmic","magma","magma soft","strata","platinum" } },
-	{ DYNAMIC_DISCS,  { "null","moon shine","fuzion","lucid","lucid air","fuzion bio","prime","classic","classic blend","classic soft","classic ss" } },
+	{ DYNAMIC_DISCS,  { "null","moon shine","fuzion","lucid","lucid air","lucid x","fuzion bio","prime","classic","classic blend","classic soft","classic ss" } },
 	{ LATITUDE_64,    { "null","moon shine","gold line","opto line","opto air","reprocessed","mega soft","zero soft","zero medium","zero hard","retro line" } },
 	{ WESTSIDE,       { "null","moon shine","tournament","vip","vip air","elasto","tournament r","mega soft","bt soft","bt medium","bt hard","origio" } },
 	{ KASTAPLAST,     { "null","k1","k1 soft","k3","k1 glow" } },
