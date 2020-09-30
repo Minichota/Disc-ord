@@ -68,17 +68,6 @@ EmbedField disc::serialize_simple()
 			value.pop_back();
 		return value;
 	};
-	auto replace_underscore = [](std::string value)->std::string
-	{
-		auto index = std::find(value.begin(), value.end(), '_');
-		while(index != value.end())
-		{
-			*index.base() = ' ';
-			index = std::find(value.begin(), value.end(), '_');
-		}
-		return value;
-	};
-
 	EmbedField output(case_switch(mold)+'\n',
 		case_switch(from_brand(brand))+'\n'+
 		trim(std::to_string(flight.speed))+'/'+
