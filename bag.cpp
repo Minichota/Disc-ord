@@ -8,12 +8,10 @@
 
 using namespace SleepyDiscord;
 
-// TODO remove
-#include <iostream>
-
-bag::bag(User owner, std::vector<disc> discs):
+bag::bag(User owner, std::vector<disc> discs, std::string thumbnail_url):
 owner(owner),
-discs(discs)
+discs(discs),
+thumbnail_url(thumbnail_url)
 {
 }
 
@@ -33,6 +31,12 @@ void bag::add_disc(disc d, uint8_t plasticID, uint8_t mass, WEAR wear)
 void bag::remove_disc(size_t index)
 {
 	discs.erase(discs.begin() + index);
+	save_bags();
+}
+
+void bag::set_url(std::string url)
+{
+	this->thumbnail_url = url;
 	save_bags();
 }
 
@@ -118,7 +122,7 @@ std::vector<EmbedField> bag::serialize()
 std::string bag::data_dump()
 {
 	auto wrap = [](std::string str){ return "\"" + str + "\"";};
-	std::string out = wrap(owner.username);
+	std::string out = wrap(owner.username)+wrap(thumbnail_url);
 	if(discs.size());
 	for(disc d : discs)
 	{

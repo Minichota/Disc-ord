@@ -70,7 +70,8 @@ enum command_ID
 	CRASH,
 	GIT_GUD,
 	BRANDS,
-	PLASTICS
+	PLASTICS,
+	PIC
 };
 
 const std::vector<std::pair<command_ID,std::string>> commands {
@@ -83,7 +84,8 @@ const std::vector<std::pair<command_ID,std::string>> commands {
 	{ CRASH, "crash" },
 	{ GIT_GUD, "git_gud" },
 	{ BRANDS, "brands" },
-	{ PLASTICS, "plastics" }
+	{ PLASTICS, "plastics" },
+	{ PIC, "pic" }
 };
 
 size_t parse_command(std::string text) {
@@ -160,7 +162,7 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 		break;
 		case ADD_BAG:
 		{
-			g_bags.push_back(bag(owner, {}));
+			g_bags.push_back(bag(owner, {}, ""));
 			output.fields = {EmbedField("new bag", "your bag was created")};
 			save_bags();
 			return;
@@ -178,6 +180,13 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 			}
 
 			output.fields = b->serialize();
+
+			if(b->thumbnail_url != "")
+			{
+				EmbedThumbnail x;
+				x.url = b->thumbnail_url;
+				output.thumbnail = x;
+			}
 			output.title = b->owner.username;
 			return;
 		}
@@ -211,6 +220,7 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 			}
 			if(fields.size() >= 4)
 			{
+				// read flight numbers from details
 				std::vector<std::string> flight = split(trim(fields[2]),'/');
 				d.flight = flight_path {
 					std::stof(flight[0]),
@@ -333,6 +343,20 @@ void handle_commands(Embed& output, User owner, std::pair<command_ID,std::string
 			}
 		}
 		break;
+		case PIC:
+		{
+			if(words.size() > 1)
+			{
+				bag* b = search_bag(owner);
+				b->set_url(words[1]);
+				output.fields = {EmbedField("good job", "your bag picture was set.")};
+			}
+			else
+			{
+				output.fields = {EmbedField("you fool", "you forgot the url.")};
+			}
+		}
+		break;
 	}
 }
 
@@ -345,6 +369,10 @@ class MyClientClass : public SleepyDiscord::DiscordClient {
 			size_t command = parse_command(trimmed_content);
 			if(command != -1)
 			{
+				for(Attachment att : message.attachments)
+				{
+					trimmed_content.append(" " + att.url);
+				}
 				Embed e;
 				handle_commands(e, message.author, std::pair<command_ID,std::string>{(command_ID)command, trimmed_content});
 				sendMessage(message.channelID, "", e);

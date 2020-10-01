@@ -130,6 +130,7 @@ void load_bags()
 	{
 		User owner = User();
 		owner.username = next_string();
+		std::string thumbnail_url = next_string();
 		std::vector<disc> discs;
 		while(*location != '\n')
 		{
@@ -145,7 +146,7 @@ void load_bags()
 						 std::stof(next_string()) };
 			discs.push_back(d);
 		}
-		g_bags.push_back(bag(owner, discs));
+		g_bags.push_back(bag(owner, discs, thumbnail_url));
 	}
 }
 
